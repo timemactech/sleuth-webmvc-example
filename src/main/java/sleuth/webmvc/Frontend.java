@@ -7,11 +7,17 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import zipkin2.Span;
+import zipkin2.reporter.Reporter;
 
 @SpringBootApplication
 @RestController
 @CrossOrigin // So that javascript can be hosted elsewhere
 public class Frontend {
+
+  @Bean Reporter<Span> spanReporter(){
+    return new AWSXRayUDPReporter();
+  }
 
   @RequestMapping("/") public String callBackend() {
     return restTemplate().getForObject("http://localhost:9000/api", String.class);
