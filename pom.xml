@@ -33,6 +33,14 @@
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-zipkin</artifactId>
     </dependency>
+    <!-- Until io.opentracing:opentracing-api is stable, inherit the version instead of setting it.
+     -->
+    <dependency>
+      <groupId>io.opentracing.brave</groupId>
+      <artifactId>brave-opentracing</artifactId>
+      <!-- works with opentracing 0.31 -->
+      <version>0.31.0</version>
+    </dependency>
   </dependencies>
 
   <dependencyManagement>
