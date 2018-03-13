@@ -2,13 +2,13 @@
 This is an example app where two Spring Boot (Java) services collaborate on an http request. Notably, timing of these requests are recorded into [Zipkin](http://zipkin.io/), a distributed tracing system. This allows you to see the how long the whole operation took, as well how much time was spent in each service.
 
 Here's an example of what it looks like
-<img width="972" alt="zipkin screen shot" src="https://cloud.githubusercontent.com/assets/64215/16300537/ff858dd6-3972-11e6-8e4c-4f7f4a6c707a.png">
+<img width="929" alt="zipkin screen shot" src="https://user-images.githubusercontent.com/64215/38400728-250104ba-3984-11e8-8c68-ffd8d6377a99.png">
 
 This example was initially made for a [Distributed Tracing Webinar on June 30th, 2016](https://spring.io/blog/2016/05/24/webinar-understanding-microservice-latency-an-introduction-to-distributed-tracing-and-zipkin). There's probably room to enroll if it hasn't completed, yet, and you are interested in the general topic.
 
 # Implementation Overview
 
-Web requests are served by [Spring MVC](https://spring.io/guides/gs/rest-service/) controllers, and tracing is automatically performed for you by [Spring Cloud Sleuth](https://cloud.spring.io/spring-cloud-sleuth/).
+Web requests are served by [Spring MVC](https://spring.io/guides/gs/rest-service/) controllers, and tracing is automatically performed for you by [Spring Cloud Sleuth](https://cloud.spring.io/spring-cloud-sleuth/). The backend listens for RabbitMQ messages using [spring-rabbit](https://projects.spring.io/spring-amqp/).
 
 This example intentionally avoids advanced topics like async and load balancing, eventhough Spring Cloud Sleuth supports that, too. Once you get familiar with things, you can play with more interesting [Spring Cloud](http://projects.spring.io/spring-cloud/) components.
 
@@ -16,7 +16,8 @@ This example intentionally avoids advanced topics like async and load balancing,
 This example has two services: frontend and backend. They both report trace data to zipkin. To setup the demo, you need to start Frontend, Backend and Zipkin.
 
 Once the services are started, open http://localhost:8081/
-* This will call the backend (http://localhost:9000/api) and show the result, which defaults to a formatted date.
+* This will call the backend (amqp://localhost with routing key "backend") and show no result as it is asynchronous.
+  * The backend listens for a message with that routing key, printing a formatted date to the console.
 
 Next, you can view traces that went through the backend via http://localhost:9411/?serviceName=backend
 * This is a locally run zipkin service which keeps traces in memory
