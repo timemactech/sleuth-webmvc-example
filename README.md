@@ -2,13 +2,13 @@
 This is an example app where two Spring Boot (Java) services collaborate on an http request. Notably, timing of these requests are recorded into [Zipkin](http://zipkin.io/), a distributed tracing system. This allows you to see the how long the whole operation took, as well how much time was spent in each service.
 
 Here's an example of what it looks like
-<img width="972" alt="zipkin screen shot" src="https://cloud.githubusercontent.com/assets/64215/16300537/ff858dd6-3972-11e6-8e4c-4f7f4a6c707a.png">
+<img width="929" alt="zipkin screen shot" src="https://user-images.githubusercontent.com/64215/38400728-250104ba-3984-11e8-8c68-ffd8d6377a99.png">
 
 This example was initially made for a [Distributed Tracing Webinar on June 30th, 2016](https://spring.io/blog/2016/05/24/webinar-understanding-microservice-latency-an-introduction-to-distributed-tracing-and-zipkin). There's probably room to enroll if it hasn't completed, yet, and you are interested in the general topic.
 
 # Implementation Overview
 
-Web requests are served by [Spring MVC](https://spring.io/guides/gs/rest-service/) controllers, and tracing is automatically performed for you by [Spring Cloud Sleuth](https://cloud.spring.io/spring-cloud-sleuth/).
+Web requests are served by [Spring MVC](https://spring.io/guides/gs/rest-service/) controllers, and tracing is automatically performed for you by [Spring Cloud Sleuth](https://cloud.spring.io/spring-cloud-sleuth/). The backend listens for ActiveMQ messages using [spring-jms](https://spring.io/guides/gs/messaging-jms/).
 
 This example intentionally avoids advanced topics like async and load balancing, eventhough Spring Cloud Sleuth supports that, too. Once you get familiar with things, you can play with more interesting [Spring Cloud](http://projects.spring.io/spring-cloud/) components.
 
@@ -16,7 +16,8 @@ This example intentionally avoids advanced topics like async and load balancing,
 This example has two services: frontend and backend. They both report trace data to zipkin. To setup the demo, you need to start Frontend, Backend and Zipkin.
 
 Once the services are started, open http://localhost:8081/
-* This will call the backend (http://localhost:9000/api) and show the result, which defaults to a formatted date.
+* This will call the backend (ActiveMQ tcp://localhost:61616 with queue "backend") and show no result as it is asynchronous.
+  * The backend listens for a message on that destination, printing a formatted date to the console.
 
 Next, you can view traces that went through the backend via http://localhost:9411/?serviceName=backend
 * This is a locally run zipkin service which keeps traces in memory
@@ -62,12 +63,12 @@ details to the existing trace.
 
 https://github.com/openzipkin/brave/tree/master/instrumentation/mysql
 
-## RabbitMQ Tracing
-[This](https://github.com/openzipkin/sleuth-webmvc-example/compare/add-rabbit-tracing) changes the example to invoke the backend with RabbitMQ
+## ActiveMQ Tracing
+[This](https://github.com/openzipkin/sleuth-webmvc-example/compare/add-jms-tracing) changes the example to invoke the backend with ActiveMQ
 instead of WebMVC. Sleuth automatically configures Brave's
-spring-rabbit to add trace details.
+spring-jms to add trace details.
 
-https://github.com/openzipkin/brave/tree/master/instrumentation/spring-rabbit
+https://github.com/openzipkin/brave/tree/master/instrumentation/spring-jms
 
 ## Dubbo Tracing
 [This](https://github.com/openzipkin/sleuth-webmvc-example/compare/add-dubbo-tracing) changes the example to call a Dubbo backend instead of WebMVC.
