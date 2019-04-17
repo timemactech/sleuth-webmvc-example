@@ -21,8 +21,6 @@ public class Frontend {
   public static void main(String[] args) {
     SpringApplication.run(Frontend.class,
         "--spring.application.name=frontend",
-        // redundant https://github.com/apache/incubator-dubbo-spring-boot-project/issues/321
-        "--dubbo.application.name=backend",
         "--server.port=8081"
     );
   }

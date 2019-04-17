@@ -19,8 +19,6 @@ public class Backend implements Api {
   public static void main(String[] args) {
     SpringApplication.run(Backend.class,
         "--spring.application.name=backend",
-        // redundant https://github.com/apache/incubator-dubbo-spring-boot-project/issues/321
-        "--dubbo.application.name=backend",
         // These args allow dubbo to start without any web framework
         "--spring.main.web-environment=false",
         "--dubbo.registry.address=N/A",
