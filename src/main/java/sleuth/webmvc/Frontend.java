@@ -1,27 +1,35 @@
 package sleuth.webmvc;
 
-import org.apache.dubbo.config.annotation.Reference;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 @EnableAutoConfiguration
 @RestController
 @CrossOrigin // So that javascript can be hosted elsewhere
 public class Frontend {
 
-  @Reference(url = "dubbo://127.0.0.1:9000") Api api;
+    final RestTemplate restTemplate;
 
-  @RequestMapping("/") public String callBackend() {
-    return api.printDate();
-  }
+    @Autowired
+    Frontend(RestTemplateBuilder restTemplateBuilder) {
+        this.restTemplate = restTemplateBuilder.build();
+    }
 
-  public static void main(String[] args) {
-    SpringApplication.run(Frontend.class,
-        "--spring.application.name=frontend",
-        "--server.port=8081"
-    );
-  }
+    @RequestMapping("/")
+    public String callBackend() {
+        return restTemplate.getForObject("http://localhost:9001/api", String.class);
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(Frontend.class,
+                "--spring.application.name=frontend",
+                "--server.port=8081"
+        );
+    }
 }
