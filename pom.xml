@@ -15,7 +15,6 @@
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-
     <sleuth.version>2.1.0.RELEASE</sleuth.version>
   </properties>
 
@@ -23,15 +22,6 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-actuator</artifactId>
-    </dependency>
-    <!-- Sends trace data to zipkin over http (defaults to http://localhost:9411/api/v2/spans) -->
-    <dependency>
-      <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-starter-zipkin</artifactId>
     </dependency>
 
     <!-- Version is aligned using Brave's Bill of Materials (io.zipkin.brave:brave-bom)
@@ -42,12 +32,6 @@
       <artifactId>brave-instrumentation-dubbo-rpc</artifactId>
       <version>1.0.0</version>
     </dependency>
-    <dependency>
-        <groupId>org.apache.httpcomponents</groupId>
-        <artifactId>httpclient</artifactId>
-        <version>4.5.8</version>
-    </dependency>
-
   </dependencies>
 
   <dependencyManagement>
